@@ -1,6 +1,6 @@
 ---
-import Header  from '../components/Header.astro';
 import Footer  from '../components/Footer.astro';
+import { ViewTransitions } from "astro:transitions";
 
 interface Props {
 	title: string;
@@ -12,18 +12,47 @@ const { title } = Astro.props;
 <!doctype html>
 <html lang="es">
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
+		<link rel="canonical" href="https://x.com/betacodeweb" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="generator" content={Astro.generator} />   
 		<title>{title}</title>
+
+    <!-- Meta SEO -->
+    <meta name="title" content="Betacode - Desarrollo, creación de sitios web">
+    <meta name="description" content="Fusionamos creatividad y tecnología para construir sitios web y software que no solo destacan visualmente, sino que también impulsan tu negocio hacia el éxito digital, en Barranquilla">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="Spanish">
+    <meta name="author" content="Betacode_team">
+
+    <!-- Social media share -->
+    <meta property="og:title" content="Betacode">
+    <meta property="og:site_name" content="Betacode_team">
+    <meta property="og:url" content="https://x.com/betacodeweb">
+    <meta property="og:description" content="Get started with a free and open-source landing page for Tailwind CSS built with the Flowbite component library featuring dark mode, hero sections, pricing cards, and more.">
+    <meta property="og:type" content="">
+    <meta property="og:image" content="">
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@themesberg" />
+    <meta name="twitter:creator" content="@themesberg" />
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="/favicon.svg">
+    <link rel="icon" type="image/svg+xml" sizes="16x16" href="/favicon.svg">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#111827">
+    <meta name="theme-color" content="#ffffff">
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+		
 	</head>
 
 	<body>
-		<Header />
 		<slot />
 		<Footer />
+		<ViewTransitions />
 	</body>
 
 </html>
