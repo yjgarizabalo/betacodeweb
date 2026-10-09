@@ -1,0 +1,18 @@
+{
+	"name": "Betacode · Desarrollo web en Barranquilla",
+	"short_name": "Betacode",
+	"description": "Desarrollo web, posicionamiento SEO y software a medida en Barranquilla.",
+	"start_url": "/",
+	"display": "standalone",
+	"theme_color": "#00AB9E",
+	"background_color": "#ffffff",
+	"lang": "es",
+	"icons": [
+		{
+			"src": "/favicon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "any maskable"
+		}
+	]
+}

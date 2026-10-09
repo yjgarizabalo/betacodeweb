@@ -1,0 +1,272 @@
+/* Plus Jakarta Sans variable self-hosted — sin peticiones externas ni CLS. */
+@import '@fontsource-variable/plus-jakarta-sans/wght.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	/* ── Tema claro (por defecto) ─────────────────────────── */
+	:root {
+		--surface: 255 255 255;
+		--surface-2: 244 250 249; /* ink-50  */
+		--surface-3: 255 255 255; /* tarjetas */
+		--line: 227 242 240; /* ink-100 */
+		--fg: 7 26 25; /* ink-900 */
+		--fg-muted: 29 75 71; /* ink-600 */
+		--band: 7 26 25; /* banda oscura sobre página clara */
+		color-scheme: light;
+	}
+
+	/* ── Tema oscuro ──────────────────────────────────────── */
+	/* La base es #071a19 (ink-900): el tono de la banda "Un proceso claro". */
+	.dark {
+		--surface: 7 26 25; /* ink-900 */
+		--surface-2: 13 39 37; /* ink-800 */
+		--surface-3: 13 39 37; /* tarjetas, un paso más claras */
+		--line: 25 60 57;
+		--fg: 255 255 255;
+		--fg-muted: 194 226 222; /* ink-200 */
+		--band: 4 18 17; /* ink-950, banda más profunda */
+		color-scheme: dark;
+	}
+
+	:root {
+		scroll-behavior: smooth;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:root { scroll-behavior: auto; }
+		*, *::before, *::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+		}
+	}
+
+	html {
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	body {
+		@apply bg-surface text-[1.0625rem] leading-relaxed text-fg-muted font-sans;
+	}
+
+	h1, h2, h3, h4 {
+		@apply text-fg;
+		text-wrap: balance;
+	}
+
+	p { text-wrap: pretty; }
+
+	:target { scroll-margin-top: 6rem; }
+
+	:focus-visible {
+		@apply outline-none ring-2 ring-brand-500 ring-offset-2;
+		--tw-ring-offset-color: rgb(var(--surface));
+	}
+
+	::selection { @apply bg-brand-500/25; }
+}
+
+@layer components {
+	/* ── Layout ────────────────────────────────────────────── */
+
+	.shell { @apply mx-auto w-full max-w-shell px-6 lg:px-8; }
+	.section { @apply py-20 lg:py-28; }
+
+	/* ── Bandas ────────────────────────────────────────────── */
+
+	/* Banda de contraste: oscura sobre página clara, más profunda en tema oscuro. */
+	.band-dark {
+		background-color: rgb(var(--band));
+		@apply text-ink-200;
+	}
+	.band-dark h1, .band-dark h2, .band-dark h3, .band-dark h4 { @apply text-white; }
+
+	.band-tint { @apply bg-surface-2; }
+
+	.rule-spectrum { @apply h-1 w-16 rounded-full bg-spectrum; }
+
+	/* ── Tipografía ────────────────────────────────────────── */
+
+	.eyebrow { @apply text-eyebrow uppercase text-brand-700; }
+	.dark .eyebrow, .band-dark .eyebrow { @apply text-brand-300; }
+
+	.lead { @apply text-lead text-fg-muted; }
+	.band-dark .lead { @apply text-ink-200; }
+
+	/* ── Botones ───────────────────────────────────────────── */
+
+	.btn {
+		@apply inline-flex items-center justify-center gap-2 rounded-md px-6 py-3 text-[0.9375rem] font-semibold transition-colors duration-150;
+	}
+
+	.btn-primary { @apply btn bg-brand-600 text-white hover:bg-brand-700; }
+
+	.btn-outline {
+		@apply btn border border-line bg-surface text-fg hover:border-brand-500 hover:text-brand-700;
+	}
+	.dark .btn-outline { @apply hover:text-brand-300; }
+	.band-dark .btn-outline {
+		@apply border-white/25 bg-transparent text-white hover:border-white hover:text-white;
+	}
+
+	.btn-link {
+		@apply inline-flex items-center gap-1.5 text-[0.9375rem] font-semibold text-brand-700 transition-colors hover:text-brand-800;
+	}
+	.dark .btn-link, .band-dark .btn-link { @apply text-brand-300 hover:text-brand-200; }
+
+	/* ── Superficies ───────────────────────────────────────── */
+
+	.card { @apply rounded-xl border border-line bg-surface-3; }
+	.card-hover { @apply transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-lift; }
+	.dark .card-hover { @apply hover:border-brand-700; }
+	.band-dark .card { @apply border-white/10 bg-white/[0.04]; }
+
+	.icon-tile { @apply flex h-11 w-11 items-center justify-center rounded-lg bg-brand-50 text-brand-700; }
+	.dark .icon-tile { @apply bg-brand-500/15 text-brand-300; }
+	.band-dark .icon-tile { @apply bg-white/10 text-brand-300; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Hero — escenario con el globo de puntos de fondo
+   El fondo sigue el tema: claro sobre superficie, profundo en oscuro.
+   ══════════════════════════════════════════════════════════════ */
+@layer components {
+	.hero-stage {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		background-color: rgb(var(--surface));
+	}
+	.dark .hero-stage { background-color: #041211; }
+
+	/* Resplandor de marca: un degradado, sin filtros ni capas que repintar. */
+	.hero-glow {
+		position: absolute;
+		left: 50%;
+		top: 40%;
+		translate: -50% -50%;
+		width: min(110vw, 1000px);
+		aspect-ratio: 1;
+		pointer-events: none;
+		z-index: 0;
+		background-image: radial-gradient(
+			circle at 50% 50%,
+			rgba(0, 171, 158, 0.09) 0%,
+			rgba(50, 170, 79, 0.05) 36%,
+			rgba(255, 255, 255, 0) 68%
+		);
+	}
+	.dark .hero-glow {
+		background-image: radial-gradient(
+			circle at 50% 50%,
+			rgba(0, 171, 158, 0.2) 0%,
+			rgba(50, 170, 79, 0.09) 38%,
+			rgba(4, 18, 17, 0) 70%
+		);
+	}
+
+	.hero-content {
+		position: relative;
+		z-index: 1;
+	}
+
+	/* Píldora de la etiqueta */
+	.badge-hero {
+		@apply inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[0.8125rem] font-semibold;
+		color: theme('colors.brand.700');
+		background: rgba(0, 171, 158, 0.08);
+		border: 1px solid rgba(0, 171, 158, 0.25);
+	}
+	.dark .badge-hero {
+		color: #b9f5e9;
+		background: rgba(0, 171, 158, 0.12);
+		border-color: rgba(0, 171, 158, 0.32);
+	}
+
+	/* CTA en píldora con el punto en degradado de marca */
+	.btn-hero {
+		@apply inline-flex items-center gap-3 rounded-full py-2 pl-2 pr-6 text-[0.9375rem] font-semibold transition-transform duration-200;
+		color: rgb(var(--fg));
+		background-color: rgb(var(--surface-3));
+		border: 1px solid rgb(var(--line));
+		box-shadow: theme('boxShadow.card');
+	}
+	.dark .btn-hero {
+		background-color: rgba(255, 255, 255, 0.07);
+		border-color: rgba(255, 255, 255, 0.16);
+		box-shadow: none;
+		-webkit-backdrop-filter: blur(8px);
+		backdrop-filter: blur(8px);
+	}
+	.btn-hero:hover { transform: translateY(-1px); }
+	.btn-hero .btn-hero-dot {
+		@apply flex h-10 w-10 flex-none items-center justify-center rounded-full text-white;
+		background: linear-gradient(145deg, #00ab9e, #32aa4f);
+		box-shadow: 0 0 20px -6px rgba(0, 171, 158, 0.8);
+	}
+
+	.btn-hero-ghost {
+		@apply inline-flex items-center gap-2 rounded-full px-5 py-3 text-[0.9375rem] font-semibold text-fg-muted transition-colors duration-200 hover:text-fg;
+	}
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Navbar — transparente sobre el hero, píldora flotante al bajar
+   ══════════════════════════════════════════════════════════════ */
+@layer components {
+	.nav-bar {
+		@apply flex items-center justify-between gap-6 px-4;
+		height: 64px;
+		border: 1px solid transparent;
+		border-radius: 9999px;
+		transition:
+			background-color 0.3s ease,
+			border-color 0.3s ease,
+			box-shadow 0.3s ease,
+			backdrop-filter 0.3s ease;
+	}
+
+	/* Estado desplazado: la barra se materializa */
+	[data-scrolled='true'] .nav-bar {
+		background-color: rgb(var(--surface) / 0.82);
+		border-color: rgb(var(--line));
+		box-shadow: 0 6px 24px -10px rgb(7 26 25 / 0.35);
+		-webkit-backdrop-filter: saturate(180%) blur(14px);
+		backdrop-filter: saturate(180%) blur(14px);
+	}
+
+	/* Enlaces: claros sobre el hero, normales cuando la barra es sólida */
+	.nav-link {
+		@apply text-[0.9375rem] font-medium transition-colors duration-200;
+		color: rgba(230, 247, 244, 0.78);
+	}
+	.nav-link:hover { color: #fff; }
+
+	[data-scrolled='true'] .nav-link { @apply text-fg-muted; }
+	[data-scrolled='true'] .nav-link:hover { @apply text-fg; }
+
+	.nav-brand {
+		@apply flex shrink-0 items-center gap-2.5 text-[1.0625rem] font-semibold tracking-tight transition-colors duration-200;
+		color: #fff;
+	}
+	[data-scrolled='true'] .nav-brand { @apply text-fg; }
+
+	.nav-icon-btn {
+		@apply inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200;
+		color: rgba(230, 247, 244, 0.8);
+	}
+	.nav-icon-btn:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+	[data-scrolled='true'] .nav-icon-btn { @apply text-fg-muted; }
+	[data-scrolled='true'] .nav-icon-btn:hover { @apply bg-surface-2 text-fg; }
+
+	/* Línea de espectro: visible solo sobre el hero, se retira al desplazar */
+	.nav-spectrum {
+		@apply h-1 w-full bg-spectrum transition-opacity duration-300;
+	}
+	[data-scrolled='true'] .nav-spectrum { @apply opacity-0; }
+}

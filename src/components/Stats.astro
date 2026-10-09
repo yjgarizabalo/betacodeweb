@@ -1,0 +1,68 @@
+---
+import Icon from '@components/Icon.astro';
+
+// Comparativa "antes / con Betacode" — patrón de contraste de GitLab.
+const without = [
+	'Plantillas genéricas que se parecen a las de todos',
+	'Sitios lentos que pierden visitantes y posiciones',
+	'Invisible en Google y en los asistentes de IA',
+	'Nadie responde cuando algo se rompe',
+];
+
+const withUs = [
+	{ title: 'Diseño a medida', description: 'Cada proyecto es único, construido alrededor de tu marca.' },
+	{ title: 'Rendimiento real', description: 'Sitios rápidos, optimizados para Core Web Vitals.' },
+	{ title: 'SEO y visibilidad', description: 'Preparados para Google y motores de IA desde el día uno.' },
+	{ title: 'Soporte cercano', description: 'Comunicación directa por WhatsApp en cada etapa.' },
+];
+---
+
+<section class="section bg-surface">
+	<div class="shell">
+		<div class="max-w-3xl">
+			<div class="rule-spectrum" aria-hidden="true"></div>
+			<p class="eyebrow mt-6">Por qué elegirnos</p>
+			<h2 class="mt-4 text-h2">La diferencia entre tener una web y tener resultados</h2>
+		</div>
+
+		<div class="mt-14 grid gap-6 lg:grid-cols-5">
+			<!-- Sin Betacode -->
+			<div class="rounded-xl border border-line bg-surface-2 p-8 lg:col-span-2">
+				<h3 class="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-fg-muted/70">
+					Sin Betacode
+				</h3>
+				<ul class="mt-6 space-y-4">
+					{
+						without.map((item) => (
+							<li class="flex items-start gap-3 text-[0.9375rem] text-fg-muted">
+								<Icon name="close" class="mt-1 h-4 w-4 flex-none text-fg-muted/40" />
+								{item}
+							</li>
+						))
+					}
+				</ul>
+			</div>
+
+			<!-- Con Betacode -->
+			<div class="relative overflow-hidden rounded-xl border border-brand-200 bg-surface-3 p-8 shadow-card lg:col-span-3">
+				<div class="absolute inset-x-0 top-0 h-1 bg-spectrum" aria-hidden="true"></div>
+				<h3 class="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-brand-700">
+					Con Betacode
+				</h3>
+				<ul class="mt-6 grid gap-6 sm:grid-cols-2">
+					{
+						withUs.map((item) => (
+							<li>
+								<div class="flex items-center gap-2.5">
+									<Icon name="check" class="h-[18px] w-[18px] flex-none text-brand-600" />
+									<h4 class="text-[1.0625rem] font-semibold text-fg">{item.title}</h4>
+								</div>
+								<p class="mt-2 text-[0.9375rem] leading-relaxed text-fg-muted">{item.description}</p>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>

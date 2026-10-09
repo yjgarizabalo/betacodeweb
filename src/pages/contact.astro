@@ -1,45 +1,77 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import HeaderContact from "../components/HeaderContact.astro";
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Icon from '@components/Icon.astro';
+import BrandIcon from '@components/BrandIcon.astro';
+import { CONTACT, WHATSAPP_URL, LOCATION, SITE } from '@/consts';
 ---
 
-<HeaderContact />
-<Layout title="Contacto | Betacode 🚀">
-  <section class="bg-white dark:bg-gray-900">
-    <div
-      class="grid max-w-screen-xl px-4 pt-20 pb-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 lg:pt-28"
-    >
-      <!-- <div class="mr-auto place-self-center lg:col-span-7">
-        <h1
-          class="max-w-2xl mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl xl:text-6xl dark:text-white"
-        >
-          Contacto
-        </h1>
-        <p
-          class="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400"
-        >
-          ¡Tu opinión es nuestra inspiración! En nuestro equipo, estamos aquí
-          para ti en cada paso del camino. ¿Tienes preguntas, ideas o
-          simplemente quieres charlar? No dudes en ponerte en contacto con
-          nosotros. Estamos esperando ansiosamente tu mensaje para crear juntos
-          algo extraordinario. ¡déjanos saber cómo podemos ayudarte hoy mismo!
-        </p>
-      </div> -->
-      <div class="hidden lg:mt-0 lg:col-span-5 lg:flex">
-        <script
-          type="text/javascript"
-          src="https://opnform.com/widgets/iframeResize.min.js"></script>
-        <iframe
-          style="border:none;width:100%;"
-          id="form-contacto-2lwgwr"
-          src="https://opnform.com/forms/contacto-2lwgwr"></iframe>
-        <script type="text/javascript">
-          iFrameResize(
-            { log: false, checkOrigin: false },
-            "#form-contacto-2lwgwr",
-          );
-        </script>
-      </div>
-    </div>
-  </section>
+<Layout
+	title={`Contacto | ${SITE.name}`}
+	description="Hablemos de tu proyecto. Contáctanos por WhatsApp o correo y recibe una cotización personalizada sin compromiso."
+>
+	<Header />
+	<main>
+		<section class="hero-stage">
+			<div class="hero-glow" aria-hidden="true"></div>
+
+			<div class="hero-content shell pb-16 pt-28 lg:pb-20 lg:pt-32">
+				<div class="mx-auto max-w-3xl text-center">
+					<p class="badge-hero">
+						<span class="h-1.5 w-1.5 rounded-full bg-brand-500 dark:bg-brand-300" aria-hidden="true"></span>
+						Contacto
+					</p>
+					<h1 class="mt-6 text-display">Hablemos de tu proyecto</h1>
+					<p class="mx-auto mt-5 max-w-2xl text-lead text-fg-muted">
+						Tu idea es nuestra inspiración. Cuéntanos qué necesitas y creemos juntos algo
+						extraordinario. Elige el canal que prefieras y te respondemos lo antes posible.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="section bg-surface">
+			<div class="shell">
+				<div class="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
+					<a
+						href={WHATSAPP_URL}
+						target="_blank"
+						rel="noopener"
+						class="card card-hover flex flex-col p-8"
+					>
+						<span class="icon-tile">
+							<BrandIcon name="whatsapp" class="h-[22px] w-[22px]" />
+						</span>
+						<h2 class="mt-6 text-h3">WhatsApp</h2>
+						<p class="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-fg-muted">
+							La forma más rápida de contactarnos. Respuesta cercana y directa.
+						</p>
+						<span class="btn-link mt-6">
+							{CONTACT.whatsappDisplay}
+							<Icon name="arrow-right" class="h-4 w-4" />
+						</span>
+					</a>
+
+					<a href={`mailto:${CONTACT.email}`} class="card card-hover flex flex-col p-8">
+						<span class="icon-tile">
+							<Icon name="envelope" class="h-[22px] w-[22px]" />
+						</span>
+						<h2 class="mt-6 text-h3">Correo electrónico</h2>
+						<p class="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-fg-muted">
+							¿Prefieres escribirnos con calma? Cuéntanos los detalles de tu proyecto.
+						</p>
+						<span class="btn-link mt-6 break-all">
+							{CONTACT.email}
+							<Icon name="arrow-right" class="h-4 w-4 flex-none" />
+						</span>
+					</a>
+				</div>
+
+				<p class="mt-10 flex items-center justify-center gap-2 text-[0.9375rem] text-fg-muted">
+					<Icon name="map-pin" class="h-[18px] w-[18px] flex-none" />
+					Atendemos desde {LOCATION.city}, {LOCATION.country} — para clientes de todo el país y el exterior.
+				</p>
+			</div>
+		</section>
+	</main>
 </Layout>

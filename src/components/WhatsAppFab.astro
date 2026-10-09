@@ -1,0 +1,20 @@
+---
+import { WHATSAPP_URL, CONTACT } from '@/consts';
+import BrandIcon from '@components/BrandIcon.astro';
+---
+
+<!-- Botón flotante de WhatsApp: se expande al pasar el cursor o al enfocar -->
+<a
+	href={WHATSAPP_URL}
+	target="_blank"
+	rel="noopener"
+	class="group fixed bottom-5 right-5 z-40 flex items-center gap-0 rounded-full bg-whatsapp py-4 pl-4 pr-4 text-white shadow-fab transition-all duration-300 hover:gap-2.5 hover:pr-5 focus-visible:gap-2.5 focus-visible:pr-5 sm:bottom-6 sm:right-6 print:hidden"
+	aria-label={`Escríbenos por WhatsApp al ${CONTACT.whatsappDisplay}`}
+>
+	<BrandIcon name="whatsapp" class="h-6 w-6 flex-none" />
+	<span
+		class="max-w-0 overflow-hidden whitespace-nowrap text-[0.9375rem] font-semibold opacity-0 transition-all duration-300 group-hover:max-w-[12rem] group-hover:opacity-100 group-focus-visible:max-w-[12rem] group-focus-visible:opacity-100"
+	>
+		Escríbenos
+	</span>
+</a>

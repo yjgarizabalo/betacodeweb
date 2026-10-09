@@ -1,0 +1,20 @@
+---
+const techs = ['React', 'Astro', 'Node.js', 'TypeScript', 'Tailwind CSS', 'Python', 'WordPress', 'Docker'];
+---
+
+<section class="border-b border-line bg-surface py-12">
+	<div class="shell">
+		<p class="text-center text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-fg-muted/70">
+			Tecnologías con las que trabajamos
+		</p>
+		<ul class="mt-7 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+			{
+				techs.map((tech) => (
+					<li class="text-lg font-semibold tracking-tight text-fg-muted/55 transition-colors hover:text-fg">
+						{tech}
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>

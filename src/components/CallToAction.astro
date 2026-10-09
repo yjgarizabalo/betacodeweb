@@ -1,0 +1,25 @@
+---
+import { WHATSAPP_URL, CONTACT } from '@/consts';
+import BrandIcon from '@components/BrandIcon.astro';
+---
+
+<section class="band-dark relative overflow-hidden">
+	<div class="absolute inset-x-0 top-0 h-1 bg-spectrum" aria-hidden="true"></div>
+
+	<div class="shell py-20 lg:py-24">
+		<div class="mx-auto max-w-3xl text-center">
+			<h2 class="text-h2">¿Listo para llevar tu negocio al siguiente nivel digital?</h2>
+			<p class="lead mx-auto mt-6 max-w-2xl">
+				Cuéntanos tu idea y te enviamos una propuesta personalizada, sin compromiso.
+				Desde Barranquilla para toda Colombia y el exterior.
+			</p>
+			<div class="mt-10 flex flex-wrap justify-center gap-3">
+				<a href={WHATSAPP_URL} target="_blank" rel="noopener" class="btn-primary">
+					<BrandIcon name="whatsapp" class="h-[18px] w-[18px]" />
+					Escríbenos por WhatsApp
+				</a>
+				<a href={`mailto:${CONTACT.email}`} class="btn-outline">Enviar un correo</a>
+			</div>
+		</div>
+	</div>
+</section>

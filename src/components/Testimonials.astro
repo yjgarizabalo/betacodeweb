@@ -1,0 +1,53 @@
+---
+// ⚠️  PLACEHOLDER: reemplaza estos testimonios por reseñas REALES de tus clientes
+//     (con su permiso). No publiques testimonios ficticios como si fueran genuinos.
+const testimonials = [
+	{
+		quote:
+			'El equipo entendió exactamente lo que necesitábamos. Nuestro nuevo sitio es rápido, moderno y empezamos a recibir más consultas.',
+		name: 'Nombre del cliente',
+		role: 'Propietario de negocio local',
+	},
+	{
+		quote:
+			'Profesionales y cercanos. La comunicación por WhatsApp hizo todo el proceso muy sencillo de principio a fin.',
+		name: 'Nombre del cliente',
+		role: 'Emprendedora',
+	},
+	{
+		quote:
+			'Además del diseño, mejoraron nuestro posicionamiento en Google. Hoy nos encuentran más fácil.',
+		name: 'Nombre del cliente',
+		role: 'Gerente de marketing',
+	},
+];
+---
+
+<section class="section band-tint">
+	<div class="shell">
+		<div class="max-w-3xl">
+			<div class="rule-spectrum" aria-hidden="true"></div>
+			<p class="eyebrow mt-6">Testimonios</p>
+			<h2 class="mt-4 text-h2">Lo que dicen nuestros clientes</h2>
+		</div>
+
+		<div class="mt-14 grid gap-6 lg:grid-cols-3">
+			{
+				testimonials.map((t) => (
+					<figure class="card flex h-full flex-col p-8">
+						<svg class="h-7 w-7 flex-none text-brand-500" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+							<path d="M9.4 5.2C6 7 4 10.3 4 14.1c0 3 1.8 4.9 4.1 4.9 2 0 3.5-1.5 3.5-3.4 0-1.9-1.3-3.3-3.1-3.3-.4 0-.8.1-1 .2.4-1.9 2-3.6 4-4.6l-2.1-2.7Zm9.2 0C15.2 7 13.2 10.3 13.2 14.1c0 3 1.8 4.9 4.1 4.9 2 0 3.5-1.5 3.5-3.4 0-1.9-1.3-3.3-3.1-3.3-.4 0-.8.1-1 .2.4-1.9 2-3.6 4-4.6l-2.1-2.7Z" />
+						</svg>
+						<blockquote class="mt-5 flex-1 text-[1.0625rem] leading-relaxed text-fg">
+							{t.quote}
+						</blockquote>
+						<figcaption class="mt-7 border-t border-line pt-5">
+							<p class="font-semibold text-fg">{t.name}</p>
+							<p class="mt-0.5 text-[0.9375rem] text-fg-muted">{t.role}</p>
+						</figcaption>
+					</figure>
+				))
+			}
+		</div>
+	</div>
+</section>

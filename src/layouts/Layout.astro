@@ -1,61 +1,158 @@
 ---
-import Footer  from '../components/Footer.astro';
-import { ViewTransitions } from "astro:transitions";
+import Footer from '@components/Footer.astro';
+import WhatsAppFab from '@components/WhatsAppFab.astro';
+import { ViewTransitions } from 'astro:transitions';
+import { SITE, CONTACT, LOCATION, SOCIAL, WHATSAPP_URL } from '@/consts';
+import '@/styles/global.css';
 
 interface Props {
-	title: string;
+	title?: string;
+	description?: string;
+	image?: string;
+	noindex?: boolean;
+	schema?: Record<string, unknown>[];
 }
 
-const { title } = Astro.props;
+const {
+	title = SITE.title,
+	description = SITE.description,
+	image = '/og-image-betacodeweb.png',
+	noindex = false,
+	schema = [],
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+const ogImage = new URL(image, Astro.site ?? SITE.url).href;
+
+// Datos estructurados base (se incluyen en todas las páginas).
+const organizationSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'ProfessionalService',
+	'@id': `${SITE.url}/#organization`,
+	name: SITE.name,
+	legalName: SITE.legalName,
+	url: SITE.url,
+	logo: new URL('/betacode.svg', SITE.url).href,
+	image: ogImage,
+	description: SITE.description,
+	foundingDate: SITE.founded,
+	email: CONTACT.email,
+	telephone: `+${CONTACT.whatsappNumber}`,
+	priceRange: '$$',
+	areaServed: {
+		'@type': 'City',
+		name: LOCATION.city,
+	},
+	address: {
+		'@type': 'PostalAddress',
+		addressLocality: LOCATION.city,
+		addressRegion: LOCATION.region,
+		addressCountry: LOCATION.countryCode,
+	},
+	contactPoint: {
+		'@type': 'ContactPoint',
+		contactType: 'customer service',
+		telephone: `+${CONTACT.whatsappNumber}`,
+		email: CONTACT.email,
+		availableLanguage: ['Spanish'],
+		url: WHATSAPP_URL,
+	},
+	sameAs: Object.values(SOCIAL),
+};
+
+const websiteSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	'@id': `${SITE.url}/#website`,
+	url: SITE.url,
+	name: SITE.name,
+	description: SITE.description,
+	inLanguage: SITE.locale,
+	publisher: { '@id': `${SITE.url}/#organization` },
+};
+
+const jsonLd = [organizationSchema, websiteSchema, ...schema];
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={SITE.lang}>
 	<head>
-		<link rel="canonical" href="https://x.com/betacodeweb" />
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="generator" content={Astro.generator} />   
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- Aplica el tema antes del primer pintado para evitar el parpadeo.
+		     is:inline mantiene el script síncrono y sin empaquetar. -->
+		<script is:inline>
+			(function () {
+				function applyTheme() {
+					try {
+						var stored = localStorage.getItem('theme');
+						var dark = stored
+							? stored === 'dark'
+							: window.matchMedia('(prefers-color-scheme: dark)').matches;
+						document.documentElement.classList.toggle('dark', dark);
+					} catch (e) {
+						/* almacenamiento bloqueado: se queda en tema claro */
+					}
+				}
+				applyTheme();
+				// View Transitions reemplaza el head: hay que reaplicarlo.
+				document.addEventListener('astro:after-swap', applyTheme);
+			})();
+		</script>
+		<meta name="generator" content={Astro.generator} />
+
 		<title>{title}</title>
+		<link rel="canonical" href={canonical} />
+		<meta name="description" content={description} />
+		<meta
+			name="robots"
+			content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'}
+		/>
+		<meta name="author" content={SITE.name} />
+		<meta name="language" content="Spanish" />
 
-    <!-- Meta SEO -->
-    <meta name="title" content="Betacode - Desarrollo, creación de sitios web">
-    <meta name="description" content="Fusionamos creatividad y tecnología para construir sitios web y software que no solo destacan visualmente, sino que también impulsan tu negocio hacia el éxito digital, en Barranquilla">
-    <meta name="robots" content="index, follow">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="language" content="Spanish">
-    <meta name="author" content="Betacode_team">
+		<!-- SEO local (Barranquilla) -->
+		<meta name="geo.region" content={`${LOCATION.countryCode}-ATL`} />
+		<meta name="geo.placename" content={LOCATION.city} />
 
-    <!-- Social media share -->
-    <meta property="og:title" content="Betacode">
-    <meta property="og:site_name" content="Betacode_team">
-    <meta property="og:url" content="https://x.com/betacodeweb">
-    <meta property="og:description" content="🚀💻 ¿Listo para llevar tu negocio al siguiente nivel digital? En Betacodeweb, fusionamos la creatividad con la tecnología para construir sitios web y software que no solo deslumbran visualmente, sino que también impulsan tu éxito en línea. Desde Barranquilla, ¡estamos aquí para hacer brillar tu presencia digital! 💡✨ #CreatividadTecnológica #ÉxitoDigital #Barranquilla">
-    <meta property="og:type" content="">
-    <meta property="og:image" content="">
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@YairG77" />
-    <meta name="twitter:creator" content="@YairG77" />
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={SITE.name} />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:alt" content={`${SITE.name} — ${description}`} />
+		<meta property="og:locale" content={SITE.locale} />
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg">
-    <link rel="icon" type="image/svg+xml" sizes="32x32" href="/favicon.svg">
-    <link rel="icon" type="image/svg+xml" sizes="16x16" href="/favicon.svg">
-    <link rel="manifest" href="/site.webmanifest">
-    <meta name="msapplication-TileColor" content="#111827">
-    <meta name="theme-color" content="#ffffff">
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
+		<!-- Twitter / X -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
 
+		<!-- Favicon & PWA -->
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="apple-touch-icon" href="/favicon.svg" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617" />
+		<meta name="msapplication-TileColor" content={SITE.themeColor} />
+
+		<!-- Datos estructurados (JSON-LD) -->
+		<script
+			type="application/ld+json"
+			set:html={JSON.stringify(jsonLd)}
+			is:inline
+		/>
+
+		<ViewTransitions />
 	</head>
 
 	<body>
 		<slot />
 		<Footer />
-		<ViewTransitions />
+		<WhatsAppFab />
 	</body>
-
 </html>
-
-<style is:global>
-</style>

@@ -1,16 +1,43 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import HeroTecno from '../components/HeroTecno.astro';
-import About from '../components/About.astro';
-import Services from '../components/Services.astro';
-import Header from '../components/Header.astro';
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Hero from '@components/Hero.astro';
+import TechStack from '@components/TechStack.astro';
+import Services from '@components/Services.astro';
+import About from '@components/About.astro';
+import Process from '@components/Process.astro';
+import Stats from '@components/Stats.astro';
+import Testimonials from '@components/Testimonials.astro';
+import FAQ from '@components/FAQ.astro';
+import CallToAction from '@components/CallToAction.astro';
+import { FAQ_ITEMS } from '@/consts';
+
+// Datos estructurados específicos de la portada (FAQPage) para GEO/SEO.
+const faqSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: FAQ_ITEMS.map((item) => ({
+		'@type': 'Question',
+		name: item.question,
+		acceptedAnswer: {
+			'@type': 'Answer',
+			text: item.answer,
+		},
+	})),
+};
 ---
 
-<Layout title="Betacode 🚀">
-	<Header/>
-	<Hero />
-	<HeroTecno />
-	<About />
-	<Services />
+<Layout schema={[faqSchema]}>
+	<Header />
+	<main>
+		<Hero />
+		<TechStack />
+		<Services />
+		<About />
+		<Process />
+		<Stats />
+		<Testimonials />
+		<FAQ />
+		<CallToAction />
+	</main>
 </Layout>
