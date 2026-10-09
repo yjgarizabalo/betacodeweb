@@ -3,10 +3,12 @@ import { Image } from 'astro:assets';
 import heroImage from '@assets/about_1.jpg';
 import { WHATSAPP_URL } from '@/consts';
 import Icon from '@components/Icon.astro';
+import HeroGlobe from '@components/HeroGlobe.astro';
 ---
 
 <section id="inicio" class="hero-stage">
 	<div class="hero-glow" aria-hidden="true"></div>
+	<HeroGlobe />
 
 	<div class="hero-content shell pb-16 pt-28 lg:pb-20 lg:pt-32">
 		<div class="mx-auto max-w-5xl text-center">

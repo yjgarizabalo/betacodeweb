@@ -144,6 +144,31 @@
 	}
 	.dark .hero-stage { background-color: #041211; }
 
+	/* Lienzo del globo: detrás del contenido, atenuado en el centro
+	   para que el titular siempre tenga contraste. */
+	.hero-globe {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		-webkit-mask-image: radial-gradient(
+			circle var(--globe-r, 420px) at 50% 40%,
+			rgba(0, 0, 0, 0.3) 0%,
+			rgba(0, 0, 0, 0.38) 52%,
+			rgba(0, 0, 0, 0.8) 88%,
+			#000 100%
+		);
+		mask-image: radial-gradient(
+			circle var(--globe-r, 420px) at 50% 40%,
+			rgba(0, 0, 0, 0.3) 0%,
+			rgba(0, 0, 0, 0.38) 52%,
+			rgba(0, 0, 0, 0.8) 88%,
+			#000 100%
+		);
+	}
+
 	/* Resplandor de marca: un degradado, sin filtros ni capas que repintar. */
 	.hero-glow {
 		position: absolute;

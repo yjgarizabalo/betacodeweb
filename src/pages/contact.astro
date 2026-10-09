@@ -3,6 +3,7 @@ import Layout from '@layouts/Layout.astro';
 import Header from '@components/Header.astro';
 import Icon from '@components/Icon.astro';
 import BrandIcon from '@components/BrandIcon.astro';
+import HeroGlobe from '@components/HeroGlobe.astro';
 import { CONTACT, WHATSAPP_URL, LOCATION, SITE } from '@/consts';
 ---
 
@@ -14,6 +15,7 @@ import { CONTACT, WHATSAPP_URL, LOCATION, SITE } from '@/consts';
 	<main>
 		<section class="hero-stage">
 			<div class="hero-glow" aria-hidden="true"></div>
+			<HeroGlobe />
 
 			<div class="hero-content shell pb-16 pt-28 lg:pb-20 lg:pt-32">
 				<div class="mx-auto max-w-3xl text-center">

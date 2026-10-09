@@ -1,0 +1,236 @@
+---
+/**
+ * Globo de puntos — animación de fondo del hero.
+ *
+ * Canvas 2D, sin dependencias ni imágenes. Una esfera de ~2.500 puntos
+ * en paralelos gira sobre su eje una vuelta cada dos minutos: movimiento
+ * lento, de fondo, que no compite con el texto.
+ *
+ * Optimizaciones:
+ *  - Los puntos se calculan una sola vez (Float32Array, coordenadas unitarias).
+ *  - Cada fotograma solo rota y proyecta: 8 multiplicaciones por punto.
+ *  - El hemisferio trasero se descarta antes de dibujar (la mitad del trabajo).
+ *  - Los puntos se pintan con sprites pregenerados por nivel de profundidad,
+ *    así el bucle no cambia estado del contexto (ni alpha, ni fillStyle).
+ *  - 30 fps bastan para un giro tan lento; se pausa fuera de pantalla.
+ *  - Respeta prefers-reduced-motion: dibuja un único fotograma estático.
+ */
+---
+
+<canvas class="hero-globe" data-hero-globe aria-hidden="true"></canvas>
+
+<script>
+	const TAU = Math.PI * 2;
+	const SPIN = TAU / 120_000; // una vuelta cada 120 s, en rad/ms
+	const TILT = -0.34; // inclinación del eje, en radianes
+	const LEVELS = 6; // niveles de profundidad pregenerados
+	const FRAME_MS = 1000 / 30;
+
+	type Sprite = { img: HTMLCanvasElement; size: number; half: number };
+
+	/** Esfera de puntos en paralelos, densidad uniforme. Se calcula una vez. */
+	function buildSphere(): Float32Array {
+		const bands = 50;
+		const pts: number[] = [];
+		for (let b = 0; b <= bands; b++) {
+			const phi = (b / bands) * Math.PI;
+			const y = Math.cos(phi);
+			const r = Math.sin(phi);
+			const count = Math.max(1, Math.round(r * bands * 2.1));
+			for (let i = 0; i < count; i++) {
+				const theta = (i / count) * TAU;
+				pts.push(r * Math.cos(theta), y, r * Math.sin(theta));
+			}
+		}
+		return new Float32Array(pts);
+	}
+
+	const POINTS = buildSphere();
+	const COUNT = POINTS.length / 3;
+
+	/** ~5 % de los puntos en color de marca, repartidos sin patrón visible. */
+	const ACCENT = new Uint8Array(COUNT);
+	for (let i = 0; i < COUNT; i++) ACCENT[i] = ((i * 2654435761) >>> 8) % 100 < 5 ? 1 : 0;
+
+	function makeSprite(color: string, radius: number, alpha: number, dpr: number): Sprite {
+		const size = Math.max(2, Math.ceil(radius * 2 * dpr));
+		const c = document.createElement('canvas');
+		c.width = size;
+		c.height = size;
+		const g = c.getContext('2d')!;
+		g.globalAlpha = alpha;
+		g.fillStyle = color;
+		g.beginPath();
+		g.arc(size / 2, size / 2, (size / 2) * 0.92, 0, TAU);
+		g.fill();
+		return { img: c, size: size / dpr, half: size / dpr / 2 };
+	}
+
+	function initGlobe(canvas: HTMLCanvasElement) {
+		const ctx2d = canvas.getContext('2d', { alpha: true });
+		const parent = canvas.parentElement;
+		if (!ctx2d || !parent) return () => {};
+		// Alias tipados: el guardia de arriba no se propaga a los cierres.
+		const ctx: CanvasRenderingContext2D = ctx2d;
+		const host: HTMLElement = parent;
+
+		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+		let w = 0;
+		let h = 0;
+		let cx = 0;
+		let cy = 0;
+		let radius = 0;
+		let dpr = 1;
+		let sprites: Sprite[][] = [];
+		let angle = 0.6;
+		let last = 0;
+		let raf = 0;
+		let visible = true;
+
+		function buildSprites() {
+			const dark = document.documentElement.classList.contains('dark');
+			const base = dark ? '#cdeae6' : '#0d2725';
+			const accent = dark ? '#4ee7d7' : '#00AB9E';
+			const aMin = dark ? 0.13 : 0.09;
+			const aMax = dark ? 0.52 : 0.3;
+			const dot = Math.min(2, Math.max(0.9, radius * 0.0048));
+
+			sprites = [];
+			for (let l = 0; l < LEVELS; l++) {
+				const d = l / (LEVELS - 1);
+				const r = dot * (0.55 + 0.45 * d);
+				const a = aMin + (aMax - aMin) * d;
+				sprites.push([
+					makeSprite(base, r, a, dpr),
+					makeSprite(accent, r * 1.3, Math.min(0.95, a * 1.8), dpr),
+				]);
+			}
+		}
+
+		function resize() {
+			const rect = host.getBoundingClientRect();
+			if (!rect.width || !rect.height) return false;
+			dpr = Math.min(2, window.devicePixelRatio || 1);
+			w = rect.width;
+			h = rect.height;
+			canvas.width = Math.round(w * dpr);
+			canvas.height = Math.round(h * dpr);
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+			cx = w / 2;
+			cy = h * 0.4;
+			// Diámetro algo mayor que la columna de texto, con tope en pantallas grandes.
+			radius = Math.min(w * 0.46, 420, h * 0.5);
+			// La máscara CSS necesita el radio para recortar justo en el limbo.
+			canvas.style.setProperty('--globe-r', `${radius}px`);
+			buildSprites();
+			return true;
+		}
+
+		const cosT = Math.cos(TILT);
+		const sinT = Math.sin(TILT);
+
+		function render() {
+			if (!radius) return;
+			ctx.clearRect(0, 0, w, h);
+			const cosA = Math.cos(angle);
+			const sinA = Math.sin(angle);
+
+			for (let i = 0, p = 0; i < COUNT; i++, p += 3) {
+				// Índices garantizados por construcción; '!' evita comprobarlos en el bucle.
+				const x0 = POINTS[p]!;
+				const y0 = POINTS[p + 1]!;
+				const z0 = POINTS[p + 2]!;
+
+				// Giro sobre el eje vertical
+				const xs = x0 * cosA + z0 * sinA;
+				const zs = z0 * cosA - x0 * sinA;
+				// Inclinación del eje hacia el observador
+				const zt = y0 * sinT + zs * cosT;
+				if (zt <= 0.02) continue; // cara oculta: fuera
+
+				const yt = y0 * cosT - zs * sinT;
+				let lvl = (zt * LEVELS) | 0;
+				if (lvl > LEVELS - 1) lvl = LEVELS - 1;
+				const s = sprites[lvl]![ACCENT[i]!]!;
+				ctx.drawImage(s.img, cx + xs * radius - s.half, cy - yt * radius - s.half, s.size, s.size);
+			}
+		}
+
+		function loop(now: number) {
+			raf = requestAnimationFrame(loop);
+			const dt = now - last;
+			if (dt < FRAME_MS) return;
+			last = now;
+			angle = (angle + SPIN * Math.min(dt, 200)) % TAU;
+			render();
+		}
+
+		function start() {
+			if (raf || reduced.matches || document.hidden || !visible) return;
+			last = performance.now();
+			raf = requestAnimationFrame(loop);
+		}
+
+		function stop() {
+			if (!raf) return;
+			cancelAnimationFrame(raf);
+			raf = 0;
+		}
+
+		if (!resize()) return () => {};
+		render();
+		start();
+
+		const ro = new ResizeObserver(() => {
+			if (resize()) render();
+		});
+		ro.observe(host);
+
+		const io = new IntersectionObserver(
+			(entries) => {
+				visible = entries.some((e) => e.isIntersecting);
+				visible ? start() : stop();
+			},
+			{ rootMargin: '120px' },
+		);
+		io.observe(canvas);
+
+		// El tema cambia los colores: basta con rehacer los sprites.
+		const mo = new MutationObserver(() => {
+			buildSprites();
+			render();
+		});
+		mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+		const onVisibility = () => (document.hidden ? stop() : start());
+		const onMotion = () => {
+			stop();
+			start();
+			render();
+		};
+		document.addEventListener('visibilitychange', onVisibility);
+		reduced.addEventListener('change', onMotion);
+
+		return () => {
+			stop();
+			ro.disconnect();
+			io.disconnect();
+			mo.disconnect();
+			document.removeEventListener('visibilitychange', onVisibility);
+			reduced.removeEventListener('change', onMotion);
+		};
+	}
+
+	let teardown: Array<() => void> = [];
+
+	function initAll() {
+		teardown.forEach((fn) => fn());
+		teardown = [...document.querySelectorAll<HTMLCanvasElement>('[data-hero-globe]')].map(initGlobe);
+	}
+
+	document.addEventListener('astro:page-load', initAll);
+	document.addEventListener('astro:before-swap', () => {
+		teardown.forEach((fn) => fn());
+		teardown = [];
+	});
+</script>
