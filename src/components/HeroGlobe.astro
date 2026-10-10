@@ -119,7 +119,9 @@
 			cx = w / 2;
 			cy = h * 0.4;
 			// Diámetro algo mayor que la columna de texto, con tope en pantallas grandes.
-			radius = Math.min(w * 0.46, 420, h * 0.5);
+			// El tope va en rem para que siga la escala global del sitio.
+			const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+			radius = Math.min(w * 0.46, rem * 26.25, h * 0.5);
 			// La máscara CSS necesita el radio para recortar justo en el limbo.
 			canvas.style.setProperty('--globe-r', `${radius}px`);
 			buildSprites();
