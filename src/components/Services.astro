@@ -29,8 +29,8 @@ const services = [
 
 <section id="servicios" class="section bg-surface">
 	<div class="shell">
-		<div class="max-w-3xl">
-			<div class="rule-spectrum" aria-hidden="true"></div>
+		<div class="max-w-3xl" data-reveal>
+			<div class="rule-spectrum" aria-hidden="true" data-reveal="bar"></div>
 			<p class="eyebrow mt-6">Nuestros servicios</p>
 			<h2 class="mt-4 text-h2">Destaca sobre tus competidores y expande el alcance de tu empresa</h2>
 			<p class="lead mt-5">
@@ -39,7 +39,7 @@ const services = [
 			</p>
 		</div>
 
-		<div class="mt-14 grid gap-6 lg:grid-cols-3">
+		<div class="mt-14 grid gap-6 lg:grid-cols-3" data-reveal-group>
 			{
 				services.map((service) => (
 					<article class="card card-hover flex flex-col p-8">
@@ -61,7 +61,7 @@ const services = [
 			}
 		</div>
 
-		<div class="mt-12">
+		<div class="mt-12" data-reveal>
 			<a href={WHATSAPP_URL} target="_blank" rel="noopener" class="btn-link">
 				Cotizar tu proyecto
 				<Icon name="arrow-right" class="h-4 w-4" />

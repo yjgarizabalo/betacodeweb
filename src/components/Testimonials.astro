@@ -25,13 +25,13 @@ const testimonials = [
 
 <section class="section band-tint">
 	<div class="shell">
-		<div class="max-w-3xl">
-			<div class="rule-spectrum" aria-hidden="true"></div>
+		<div class="max-w-3xl" data-reveal>
+			<div class="rule-spectrum" aria-hidden="true" data-reveal="bar"></div>
 			<p class="eyebrow mt-6">Testimonios</p>
 			<h2 class="mt-4 text-h2">Lo que dicen nuestros clientes</h2>
 		</div>
 
-		<div class="mt-14 grid gap-6 lg:grid-cols-3">
+		<div class="mt-14 grid gap-6 lg:grid-cols-3" data-reveal-group>
 			{
 				testimonials.map((t) => (
 					<figure class="card flex h-full flex-col p-8">

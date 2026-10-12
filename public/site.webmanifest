@@ -4,8 +4,8 @@
 	"description": "Desarrollo web, posicionamiento SEO y software a medida en Barranquilla.",
 	"start_url": "/",
 	"display": "standalone",
-	"theme_color": "#00AB9E",
-	"background_color": "#ffffff",
+	"theme_color": "#071a19",
+	"background_color": "#071a19",
 	"lang": "es",
 	"icons": [
 		{

@@ -3,11 +3,13 @@ import { WHATSAPP_URL, CONTACT } from '@/consts';
 import BrandIcon from '@components/BrandIcon.astro';
 ---
 
-<section class="band-dark relative overflow-hidden">
+<section class="band-dark relative">
 	<div class="absolute inset-x-0 top-0 h-1 bg-spectrum" aria-hidden="true"></div>
 
 	<div class="shell py-20 lg:py-24">
-		<div class="mx-auto max-w-3xl text-center">
+		<!-- `data-reveal-tail`: es la última sección antes del pie, así que al
+		     documento ya no le queda scroll para cerrar un tramo `cover`. -->
+		<div class="mx-auto max-w-3xl text-center" data-reveal="tail">
 			<h2 class="text-h2">¿Listo para llevar tu negocio al siguiente nivel digital?</h2>
 			<p class="lead mx-auto mt-6 max-w-2xl">
 				Cuéntanos tu idea y te enviamos una propuesta personalizada, sin compromiso.

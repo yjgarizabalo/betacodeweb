@@ -30,6 +30,10 @@
 
 		btn.addEventListener('click', () => {
 			const isDark = document.documentElement.classList.toggle('dark');
+			// La barra del navegador acompaña al tema elegido.
+			document
+				.querySelector('meta[name="theme-color"]')
+				?.setAttribute('content', isDark ? '#071a19' : '#ffffff');
 			try {
 				localStorage.setItem('theme', isDark ? 'dark' : 'light');
 			} catch {

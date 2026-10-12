@@ -19,16 +19,16 @@ const withUs = [
 
 <section class="section bg-surface">
 	<div class="shell">
-		<div class="max-w-3xl">
-			<div class="rule-spectrum" aria-hidden="true"></div>
+		<div class="max-w-3xl" data-reveal>
+			<div class="rule-spectrum" aria-hidden="true" data-reveal="bar"></div>
 			<p class="eyebrow mt-6">Por qué elegirnos</p>
 			<h2 class="mt-4 text-h2">La diferencia entre tener una web y tener resultados</h2>
 		</div>
 
-		<div class="mt-14 grid gap-6 lg:grid-cols-5">
+		<div class="mt-14 grid gap-6 lg:grid-cols-5" data-reveal-group>
 			<!-- Sin Betacode -->
 			<div class="rounded-xl border border-line bg-surface-2 p-8 lg:col-span-2">
-				<h3 class="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-fg-muted/70">
+				<h3 class="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-fg-muted/80">
 					Sin Betacode
 				</h3>
 				<ul class="mt-6 space-y-4">
@@ -44,9 +44,9 @@ const withUs = [
 			</div>
 
 			<!-- Con Betacode -->
-			<div class="relative overflow-hidden rounded-xl border border-brand-200 bg-surface-3 p-8 shadow-card lg:col-span-3">
-				<div class="absolute inset-x-0 top-0 h-1 bg-spectrum" aria-hidden="true"></div>
-				<h3 class="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-brand-700">
+			<div class="relative overflow-hidden rounded-xl border border-brand-200 bg-surface-3 p-8 shadow-card lg:col-span-3" data-frame>
+				<div class="absolute inset-x-0 top-0 h-1 bg-spectrum" aria-hidden="true" data-reveal="bar" data-in-frame></div>
+				<h3 class="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-brand-700 dark:text-brand-300">
 					Con Betacode
 				</h3>
 				<ul class="mt-6 grid gap-6 sm:grid-cols-2">

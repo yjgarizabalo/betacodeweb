@@ -47,14 +47,18 @@ import HeroGlobe from '@components/HeroGlobe.astro';
 			</div>
 		</div>
 
+		<!-- Esta imagen es el elemento LCP de la portada: los anchos están
+		     elegidos para que un móvil no se descargue un archivo de 768 px
+		     cuando le bastan 670. -->
 		<div class="mt-12 animate-fade-up" style="animation-delay:.18s">
 			<Image
 				src={heroImage}
 				alt="Equipo de Betacode desarrollando sitios web y software a medida"
-				widths={[768, 1136, 1500]}
+				widths={[672, 896, 1136, 1500]}
 				sizes="(max-width: 1240px) 92vw, 909px"
 				loading="eager"
 				fetchpriority="high"
+				quality={55}
 				class="aspect-[16/7] w-full rounded-2xl border border-line object-cover shadow-lift dark:border-white/10"
 			/>
 		</div>

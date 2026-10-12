@@ -22,8 +22,8 @@ const highlights = [
 
 <section id="nosotros" class="section band-tint">
 	<div class="shell grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
-		<div>
-			<div class="rule-spectrum" aria-hidden="true"></div>
+		<div data-reveal>
+			<div class="rule-spectrum" aria-hidden="true" data-reveal="bar"></div>
 			<p class="eyebrow mt-6">Nosotros</p>
 			<h2 class="mt-4 text-h2">Invertimos en el potencial del mundo laboral</h2>
 			<p class="lead mt-5">
@@ -49,13 +49,19 @@ const highlights = [
 			</ul>
 		</div>
 
-		<Image
-			src={aboutImage}
-			alt="Equipo de Betacode colaborando en soluciones tecnológicas"
-			widths={[600, 900, 1200]}
-			sizes="(max-width: 1024px) 92vw, 432px"
-			loading="lazy"
-			class="aspect-[4/3] w-full rounded-2xl border border-line object-cover shadow-card"
-		/>
+		<!-- El encuadre se asienta mientras la imagen sube: el recorte lo
+		     contiene el contenedor, no la propia imagen. -->
+		<div class="overflow-hidden rounded-2xl border border-line shadow-card" data-reveal="right" data-frame>
+			<Image
+				src={aboutImage}
+				alt="Equipo de Betacode colaborando en soluciones tecnológicas"
+				widths={[600, 900, 1200]}
+				sizes="(max-width: 1024px) 92vw, 432px"
+				loading="lazy"
+				quality={62}
+				data-media-settle
+				class="aspect-[4/3] w-full object-cover"
+			/>
+		</div>
 	</div>
 </section>

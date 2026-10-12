@@ -1,0 +1,19 @@
+---
+/**
+ * Botón «volver arriba» — sin JavaScript.
+ *
+ * `#top` es el fragmento que el estándar de HTML reserva para el
+ * principio del documento: funciona aunque no exista ningún elemento
+ * con ese id, y el desplazamiento suave lo aporta `scroll-behavior`
+ * declarado en el :root.
+ *
+ * La aparición y el anillo de progreso son animaciones dirigidas por
+ * el scroll (`animation-timeline: scroll()`), definidas en global.css.
+ * En navegadores sin soporte el botón simplemente está siempre visible.
+ */
+import Icon from '@components/Icon.astro';
+---
+
+<a href="#top" class="to-top print:hidden" aria-label="Volver al inicio de la página">
+	<Icon name="arrow-up" class="h-[1.125rem] w-[1.125rem]" />
+</a>

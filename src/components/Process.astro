@@ -21,8 +21,8 @@ const steps = [
 
 <section id="proceso" class="band-dark section">
 	<div class="shell">
-		<div class="max-w-3xl">
-			<div class="rule-spectrum" aria-hidden="true"></div>
+		<div class="max-w-3xl" data-reveal>
+			<div class="rule-spectrum" aria-hidden="true" data-reveal="bar"></div>
 			<p class="eyebrow mt-6">Cómo trabajamos</p>
 			<h2 class="mt-4 text-h2">Un proceso claro, de la idea al lanzamiento</h2>
 			<p class="lead mt-5">
@@ -31,11 +31,11 @@ const steps = [
 			</p>
 		</div>
 
-		<ol class="mt-14 grid gap-y-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-y-0">
+		<ol class="mt-14 grid gap-y-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-y-0" data-reveal-group>
 			{
 				steps.map((step, i) => (
 					<li class="lg:border-l lg:border-white/15 lg:px-8 lg:first:border-l-0 lg:first:pl-0">
-						<span class="block text-[2.5rem] font-bold leading-none tracking-tight text-white/20 tabular-nums">
+						<span class="block text-[2.5rem] font-bold leading-none tracking-tight text-white/40 tabular-nums">
 							{String(i + 1).padStart(2, '0')}
 						</span>
 						<h3 class="mt-5 text-h3">{step.title}</h3>

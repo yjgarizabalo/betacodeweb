@@ -13,12 +13,17 @@ export default defineConfig({
 		sitemap(),
 	],
 	build: {
-		// Inyecta el CSS crítico en línea para mejorar el First Paint.
-		inlineStylesheets: 'auto',
+		// Todo el CSS va en línea: son ~10 kB y era la única petición que
+		// bloqueaba el pintado, además de retrasar el descubrimiento de la
+		// fuente (HTML -> CSS -> woff2). En línea, esa cadena desaparece.
+		inlineStylesheets: 'always',
 	},
 	prefetch: {
+		// Al pasar el cursor, no al entrar en pantalla: con 'viewport' el
+		// pie de página dispara una descarga por cada enlace durante la
+		// carga, compitiendo con lo que sí hace falta pintar.
 		prefetchAll: true,
-		defaultStrategy: 'viewport',
+		defaultStrategy: 'hover',
 	},
 	vite: {
 		// Alias de rutas para el build (equivalen a los `paths` del tsconfig).

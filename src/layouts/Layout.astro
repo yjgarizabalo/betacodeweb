@@ -1,6 +1,7 @@
 ---
 import Footer from '@components/Footer.astro';
 import WhatsAppFab from '@components/WhatsAppFab.astro';
+import BackToTop from '@components/BackToTop.astro';
 import { ViewTransitions } from 'astro:transitions';
 import { SITE, CONTACT, LOCATION, SOCIAL, WHATSAPP_URL } from '@/consts';
 import '@/styles/global.css';
@@ -80,26 +81,6 @@ const jsonLd = [organizationSchema, websiteSchema, ...schema];
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-		<!-- Aplica el tema antes del primer pintado para evitar el parpadeo.
-		     is:inline mantiene el script síncrono y sin empaquetar. -->
-		<script is:inline>
-			(function () {
-				function applyTheme() {
-					try {
-						var stored = localStorage.getItem('theme');
-						var dark = stored
-							? stored === 'dark'
-							: window.matchMedia('(prefers-color-scheme: dark)').matches;
-						document.documentElement.classList.toggle('dark', dark);
-					} catch (e) {
-						/* almacenamiento bloqueado: se queda en tema claro */
-					}
-				}
-				applyTheme();
-				// View Transitions reemplaza el head: hay que reaplicarlo.
-				document.addEventListener('astro:after-swap', applyTheme);
-			})();
-		</script>
 		<meta name="generator" content={Astro.generator} />
 
 		<title>{title}</title>
@@ -136,9 +117,35 @@ const jsonLd = [organizationSchema, websiteSchema, ...schema];
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="apple-touch-icon" href="/favicon.svg" />
 		<link rel="manifest" href="/site.webmanifest" />
-		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
-		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617" />
+		<!-- Un único valor: el tema del sitio ya no depende del sistema
+		     operativo, lo decide el conmutador. El script de abajo lo
+		     mantiene en sincronía. -->
+		<meta name="theme-color" content="#071a19" />
 		<meta name="msapplication-TileColor" content={SITE.themeColor} />
+
+		<!-- Aplica el tema antes del primer pintado para evitar el parpadeo.
+		     is:inline mantiene el script síncrono y sin empaquetar. -->
+		<script is:inline>
+			(function () {
+				// El tema por defecto del sitio es el OSCURO. Solo se pasa a
+				// claro si la persona lo eligió en el conmutador: no se
+				// consulta `prefers-color-scheme` a propósito.
+				function applyTheme() {
+					var dark = true;
+					try {
+						dark = localStorage.getItem('theme') !== 'light';
+					} catch (e) {
+						/* almacenamiento bloqueado: se queda en el tema oscuro */
+					}
+					document.documentElement.classList.toggle('dark', dark);
+					var meta = document.querySelector('meta[name="theme-color"]');
+					if (meta) meta.setAttribute('content', dark ? '#071a19' : '#ffffff');
+				}
+				applyTheme();
+				// View Transitions reemplaza el head: hay que reaplicarlo.
+				document.addEventListener('astro:after-swap', applyTheme);
+			})();
+		</script>
 
 		<!-- Datos estructurados (JSON-LD) -->
 		<script
@@ -154,5 +161,6 @@ const jsonLd = [organizationSchema, websiteSchema, ...schema];
 		<slot />
 		<Footer />
 		<WhatsAppFab />
+		<BackToTop />
 	</body>
 </html>
